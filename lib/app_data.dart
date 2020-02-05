@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 enum Syllabary { Hiragana, Katakana }
 
@@ -15,6 +16,7 @@ class AppData with ChangeNotifier {
   bool _guessChara = true;
   Character _currentQuestion = Character("bogus", "bogus");
   List<String> _currentAnswers = List<String>();
+  AudioCache audioCache = AudioCache(prefix: 'sound/');
 
   bool awaitingInput = true;
   int get maxStreak => _maxStreak;
@@ -90,6 +92,7 @@ class AppData with ChangeNotifier {
       }
       // Increments streak and replaces displayed question with x or ✔
       if (correct) {
+        audioCache.play('correct.mp3', volume: 0.1);
         _currentStreak++;
         _currentQuestion = _guessChara
             ? Character('✔', _currentQuestion.sound)

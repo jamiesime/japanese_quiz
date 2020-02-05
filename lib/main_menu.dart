@@ -18,12 +18,12 @@ class MainMenu extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(20),
-            alignment: Alignment.topLeft,
-            child: Text("Kana \nPractice",
+            padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
+            alignment: Alignment.topCenter,
+            child: Text("kanarama",
                 style: Theme.of(context).textTheme.display1),
           ),
-          Divider(height: 350,),
+          Divider(height: 390,),
           Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
