@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app_data.dart';
+import 'theme_data.dart';
 
 class QuizScreen extends StatelessWidget {
   Syllabary list;
-
   QuizScreen(Syllabary list) {
     this.list = list;
   }
@@ -14,6 +14,7 @@ class QuizScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => AppData(list),
       child: Container(
+        color: Theme.of(context).backgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -25,6 +26,7 @@ class QuizScreen extends StatelessWidget {
                 StreakCounter(),
               ],
             ),
+            Divider(height: 20,),
             AnswerGrid(),
           ],
         ),
@@ -108,13 +110,12 @@ class SwapCharasButton extends StatefulWidget {
   _SwapCharasButtonState createState() => _SwapCharasButtonState();
 }
 
-class _SwapCharasButtonState extends State<SwapCharasButton> with TickerProviderStateMixin {
+class _SwapCharasButtonState extends State<SwapCharasButton>
+    with TickerProviderStateMixin {
   final Tween<double> turnsTween = Tween<double>(
     begin: 1,
     end: 1.5,
   );
-
-  
 
   AnimationController _controller;
   bool first = true;
@@ -133,23 +134,24 @@ class _SwapCharasButtonState extends State<SwapCharasButton> with TickerProvider
     return RotationTransition(
       turns: turnsTween.animate(_controller),
       child: Container(
-        child: FlatButton(
-          padding: EdgeInsets.all(30),
-          child: Icon(
-            Icons.swap_vertical_circle,
-            color: Theme.of(context).primaryColor,
-            size: 80,
+          child: RawMaterialButton(
+            child: Container(
+              child: Icon(
+                Icons.swap_vertical_circle,
+                color: Theme.of(context).primaryColor,
+                size: 80,
+              ),
+            ),
+            onPressed: () {
+              if (first) {
+                _controller.forward();
+              } else {
+                _controller.reverse();
+              }
+              first = !first;
+              data.swapGuessChara();
+            },
           ),
-          onPressed: () {
-            if(first){
-              _controller.forward();
-            } else {
-              _controller.reverse();
-            }
-            first = !first;
-            data.swapGuessChara();
-          },
-        ),
       ),
     );
   }
