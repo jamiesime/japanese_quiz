@@ -23,9 +23,12 @@ class QuizScreen extends StatelessWidget {
               children: <Widget>[
                 SwapCharasButton(),
                 StreakCounter(),
+                MuteButton(),
               ],
             ),
-            Divider(height: 20,),
+            Divider(
+              height: 20,
+            ),
             AnswerGrid(),
           ],
         ),
@@ -133,24 +136,24 @@ class _SwapCharasButtonState extends State<SwapCharasButton>
     return RotationTransition(
       turns: turnsTween.animate(_controller),
       child: Container(
-          child: RawMaterialButton(
-            child: Container(
-              child: Icon(
-                Icons.swap_vertical_circle,
-                color: Theme.of(context).primaryColor,
-                size: 80,
-              ),
+        child: RawMaterialButton(
+          child: Container(
+            child: Icon(
+              Icons.swap_vertical_circle,
+              color: Theme.of(context).primaryColor,
+              size: 80,
             ),
-            onPressed: () {
-              if (first) {
-                _controller.forward();
-              } else {
-                _controller.reverse();
-              }
-              first = !first;
-              data.swapGuessChara();
-            },
           ),
+          onPressed: () {
+            if (first) {
+              _controller.forward();
+            } else {
+              _controller.reverse();
+            }
+            first = !first;
+            data.swapGuessChara();
+          },
+        ),
       ),
     );
   }
@@ -168,6 +171,37 @@ class StreakCounter extends StatelessWidget {
           style: Theme.of(context).textTheme.body1,
         )),
       ),
+    );
+  }
+}
+
+class MuteButton extends StatefulWidget {
+  bool muted = false;
+  @override
+  _MuteButtonState createState() => _MuteButtonState();
+}
+
+class _MuteButtonState extends State<MuteButton> {
+  @override
+  Widget build(BuildContext context) {
+    AppData data = Provider.of<AppData>(context, listen: false);
+    IconData displayIcon = Icons.volume_up;
+    if (data.getMuted()) {
+      displayIcon = Icons.volume_mute;
+    }
+    // TODO: implement build
+    return RawMaterialButton(
+      child: Container(
+        child: Icon(
+          displayIcon,
+          color: Theme.of(context).primaryColor,
+          size: 80,
+        ),
+      ),
+      onPressed: () {
+        data.toggleMuted();
+        setState(() {});
+      },
     );
   }
 }

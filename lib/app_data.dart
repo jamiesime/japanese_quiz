@@ -16,15 +16,18 @@ class AppData with ChangeNotifier {
   bool _guessChara = true;
   Character _currentQuestion = Character("bogus", "bogus");
   List<String> _currentAnswers = List<String>();
+
   AudioCache audioCache = AudioCache(prefix: 'sound/');
 
   bool awaitingInput = true;
+  bool muted = false;
   int get maxStreak => _maxStreak;
   List<Character> get hiragana => _hiragana;
   List<Character> get katakana => _katakana;
 
   int getCurrentStreak() => _currentStreak;
   List<String> getCurrentAnswers() => _currentAnswers;
+  bool getMuted() => muted;
 
   // Get a question on initialise.
   AppData(Syllabary syllab) {
@@ -40,6 +43,10 @@ class AppData with ChangeNotifier {
     getNextQuestion();
     getNewAnswers(4);
     notifyListeners();
+  }
+
+  void toggleMuted(){
+    muted = !muted;
   }
 
   void incrementStreak() {
@@ -92,7 +99,7 @@ class AppData with ChangeNotifier {
       }
       // Increments streak and replaces displayed question with x or ✔
       if (correct) {
-        audioCache.play('correct.mp3', volume: 0.1);
+        if(!muted) audioCache.play('correct.mp3', volume: 0.1);
         _currentStreak++;
         _currentQuestion = _guessChara
             ? Character('✔', _currentQuestion.sound)
