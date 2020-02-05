@@ -40,6 +40,7 @@ class AnswerGrid extends StatelessWidget {
     List<String> answers = data.getCurrentAnswers();
     return Container(
       child: Table(
+        columnWidths: {0: FractionColumnWidth(.4), 1: FractionColumnWidth(.4)},
         children: <TableRow>[
           TableRow(
             children: <Widget>[
@@ -63,7 +64,8 @@ class QuestionDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(30),
+      height: 150,
+      alignment: Alignment.center,
       child: Consumer<AppData>(
         builder: (_, data, __) => Text(data.getCurrentQuestion(),
             style: Theme.of(context).textTheme.headline),
@@ -84,9 +86,8 @@ class AnswerButton extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(5),
       child: ButtonTheme(
-        minWidth: 120,
+        minWidth: 20,
         height: 120,
-        padding: EdgeInsets.all(20),
         child: RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(
@@ -102,21 +103,53 @@ class AnswerButton extends StatelessWidget {
   }
 }
 
-class SwapCharasButton extends StatelessWidget {
+class SwapCharasButton extends StatefulWidget {
+  @override
+  _SwapCharasButtonState createState() => _SwapCharasButtonState();
+}
+
+class _SwapCharasButtonState extends State<SwapCharasButton> with TickerProviderStateMixin {
+  final Tween<double> turnsTween = Tween<double>(
+    begin: 1,
+    end: 1.5,
+  );
+
+  
+
+  AnimationController _controller;
+  bool first = true;
+
+  initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = Provider.of<AppData>(context);
-    return Container(
-      child: FlatButton(
-        padding: EdgeInsets.all(30),
-        child: Icon(
-          Icons.swap_vertical_circle,
-          color: Theme.of(context).primaryColor,
-          size: 60,
+    return RotationTransition(
+      turns: turnsTween.animate(_controller),
+      child: Container(
+        child: FlatButton(
+          padding: EdgeInsets.all(30),
+          child: Icon(
+            Icons.swap_vertical_circle,
+            color: Theme.of(context).primaryColor,
+            size: 80,
+          ),
+          onPressed: () {
+            if(first){
+              _controller.forward();
+            } else {
+              _controller.reverse();
+            }
+            first = !first;
+            data.swapGuessChara();
+          },
         ),
-        onPressed: () {
-          data.swapGuessChara();
-        },
       ),
     );
   }

@@ -65,7 +65,8 @@ class AppData with ChangeNotifier {
         answers.add(list[rnd.nextInt(list.length)].chara);
       }
     }
-    String correctAnswer = _guessChara ?_currentQuestion.sound :_currentQuestion.chara;
+    String correctAnswer =
+        _guessChara ? _currentQuestion.sound : _currentQuestion.chara;
     answers.insert(rnd.nextInt(answers.length), correctAnswer);
     _currentAnswers = answers;
   }
@@ -87,6 +88,7 @@ class AppData with ChangeNotifier {
       } else {
         correct = answer == _currentQuestion.chara ? true : false;
       }
+      // Increments streak and replaces displayed question with x or ✔
       if (correct) {
         _currentStreak++;
         _currentQuestion = _guessChara
