@@ -8,18 +8,23 @@ var lightTheme = ThemeData(
   primaryColor: Color.fromARGB(255, 216, 214, 195),
   textTheme: TextTheme(
     headline: TextStyle(
-      fontSize: 80,
-      fontFamily: 'Arial',
+      fontSize: 60,
+      fontFamily: 'Roboto',
       color: Colors.white,
     ),
     title: TextStyle(
       fontSize: 40,
-      fontFamily: 'Arial',
+      fontFamily: 'Roboto',
       color: Colors.black,
+    ),
+    display1: TextStyle(
+      fontSize: 50,
+      fontFamily: 'Roboto',
+      color: Colors.white,
     ),
     body1: TextStyle(
       fontSize: 30,
-      fontFamily: 'Arial',
+      fontFamily: 'Roboto',
       color: Colors.black,
     ),
   ),
