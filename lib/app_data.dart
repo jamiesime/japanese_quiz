@@ -20,7 +20,7 @@ class AppData with ChangeNotifier {
   bool awaitingInput = true;
   bool muted = false;
   int _correctAnswers = 0;
-  int _currentQIndex = 0;
+  int _currentQIndex = 1;
   int _maxQIndex = 5;
 
   int get correctAnswers => _correctAnswers;
@@ -32,10 +32,17 @@ class AppData with ChangeNotifier {
   bool getMuted() => muted;
 
   // Get a question on initialise.
-  AppData(Syllabary syllab) {
+  void startQuiz(Syllabary syllab) {
     this._syllabary = syllab;
     getNextQuestion();
     getNewAnswers(4);
+  }
+
+  // Resets quiz related vars to initial states.
+  void resetValues(){
+    _correctAnswers = 0;
+    _currentQIndex = 1;
+    awaitingInput = true;
   }
 
   // Inverts bool to swap guesses/answer from kana to english.

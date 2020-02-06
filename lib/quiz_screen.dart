@@ -11,26 +11,27 @@ class QuizScreen extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AppData(list),
+    return WillPopScope(
+      onWillPop: () async => false,
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            QuestionCounter(),
             QuestionDisplay(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                SwapCharasButton(),
-                QuestionCounter(),
-                MuteButton(),
-              ],
-            ),
-            Divider(
-              height: 20,
-            ),
             AnswerGrid(),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  BackButton(),
+                  SwapCharasButton(),
+                  MuteButton(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -103,6 +104,7 @@ class AnswerButton extends StatelessWidget {
             if (data.currentQIndex < data.maxQIndex) {
               data.evaluateAnswer(answer);
             } else {
+              data.evaluateAnswer(answer);
               Navigator.push(
                 context,
                 CupertinoPageRoute(
@@ -151,7 +153,7 @@ class _SwapCharasButtonState extends State<SwapCharasButton>
             child: Icon(
               Icons.swap_vertical_circle,
               color: Theme.of(context).primaryColor,
-              size: 80,
+              size: 60,
             ),
           ),
           onPressed: () {
@@ -180,10 +182,10 @@ class QuestionCounter extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).primaryColor,
         ),
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
         child: Text(
           "$c / $m",
-          style: Theme.of(context).textTheme.body2,
+          style: Theme.of(context).textTheme.button,
         ));
   }
 }
@@ -207,12 +209,37 @@ class _MuteButtonState extends State<MuteButton> {
         child: Icon(
           displayIcon,
           color: Theme.of(context).primaryColor,
-          size: 80,
+          size: 60,
         ),
       ),
       onPressed: () {
         data.toggleMuted();
         setState(() {});
+      },
+    );
+  }
+}
+
+class BackButton extends StatelessWidget {
+  const BackButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    AppData data = Provider.of<AppData>(context);
+    return RawMaterialButton(
+      child: Container(
+        child: Icon(
+          Icons.arrow_back,
+          color: Theme.of(context).primaryColor,
+          size: 60,
+        ),
+      ),
+      onPressed: () {
+        data.resetValues();
+        Navigator.popUntil(
+          context,
+          ModalRoute.withName('/'),
+        );
       },
     );
   }

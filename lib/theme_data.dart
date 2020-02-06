@@ -32,5 +32,10 @@ var lightTheme = ThemeData(
       fontFamily: 'Roboto',
       color: Colors.black,
     ),
+    button:TextStyle(
+      fontSize: 25,
+      fontFamily: 'Roboto',
+      color: Colors.black26,
+    ),
   ),
 );
