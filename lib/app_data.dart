@@ -1,14 +1,14 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:japanese_quiz/result_screen.dart';
 
 enum Syllabary { Hiragana, Katakana }
 
 // Keeps track of state multiple widgets need access to and handles quiz logic.
 class AppData with ChangeNotifier {
-  int _maxStreak = 0;
-  int _currentStreak = 0;
   Random rnd = new Random();
   Syllabary _syllabary = Syllabary.Hiragana;
   final _hiragana = hiraList;
@@ -16,20 +16,18 @@ class AppData with ChangeNotifier {
   bool _guessChara = true;
   Character _currentQuestion = Character("bogus", "bogus");
   List<String> _currentAnswers = List<String>();
-
   AudioCache audioCache = AudioCache(prefix: 'sound/');
-
   bool awaitingInput = true;
   bool muted = false;
+  int _correctAnswers = 0;
   int _currentQIndex = 0;
-  int _maxQIndex = 20;
+  int _maxQIndex = 5;
+
+  int get correctAnswers => _correctAnswers;
   int get currentQIndex => _currentQIndex;
   int get maxQIndex => _maxQIndex;
-
   List<Character> get hiragana => _hiragana;
   List<Character> get katakana => _katakana;
-
-  int getCurrentStreak() => _currentStreak;
   List<String> getCurrentAnswers() => _currentAnswers;
   bool getMuted() => muted;
 
@@ -49,13 +47,8 @@ class AppData with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleMuted(){
+  void toggleMuted() {
     muted = !muted;
-  }
-
-  void incrementStreak() {
-    _maxStreak++;
-    notifyListeners();
   }
 
   String getCurrentQuestion() {
@@ -103,14 +96,13 @@ class AppData with ChangeNotifier {
       }
       // Increments streak and replaces displayed question with x or ✔
       if (correct) {
-        if(!muted) audioCache.play('correct.mp3', volume: 0.1);
-        _currentStreak++;
+        if (!muted) audioCache.play('correct.mp3', volume: 0.1);
+        _correctAnswers++;
         _currentQuestion = _guessChara
             ? Character('correct', _currentQuestion.sound)
             : Character(_currentQuestion.chara, 'correct');
       } else {
-        if(!muted) audioCache.play('wrong.mp3', volume: 0.1);
-        _currentStreak = 0;
+        if (!muted) audioCache.play('wrong.mp3', volume: 0.1);
         _currentQuestion = _guessChara
             ? Character('wrong', _currentQuestion.sound)
             : Character(_currentQuestion.chara, 'wrong');
@@ -122,12 +114,10 @@ class AppData with ChangeNotifier {
 
   void nextQuestion() {
     Future.delayed(Duration(milliseconds: 800), () {
-      if(_currentQIndex < maxQIndex){
-        _currentQIndex++;
-        getNextQuestion();
-        getNewAnswers(4);
-        notifyListeners();
-      }
+      _currentQIndex++;
+      getNextQuestion();
+      getNewAnswers(4);
+      notifyListeners();
       awaitingInput = true;
     });
   }

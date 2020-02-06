@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app_data.dart';
+import 'result_screen.dart';
 
 class QuizScreen extends StatelessWidget {
   Syllabary list;
@@ -99,7 +100,16 @@ class AnswerButton extends StatelessWidget {
             style: Theme.of(context).textTheme.title,
           ),
           onPressed: () {
-            data.evaluateAnswer(answer);
+            if (data.currentQIndex < data.maxQIndex) {
+              data.evaluateAnswer(answer);
+            } else {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => Result(),
+                ),
+              );
+            }
           },
         ),
       ),
@@ -192,7 +202,6 @@ class _MuteButtonState extends State<MuteButton> {
     if (data.getMuted()) {
       displayIcon = Icons.volume_mute;
     }
-    // TODO: implement build
     return RawMaterialButton(
       child: Container(
         child: Icon(
