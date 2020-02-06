@@ -21,7 +21,11 @@ class AppData with ChangeNotifier {
 
   bool awaitingInput = true;
   bool muted = false;
-  int get maxStreak => _maxStreak;
+  int _currentQIndex = 0;
+  int _maxQIndex = 20;
+  int get currentQIndex => _currentQIndex;
+  int get maxQIndex => _maxQIndex;
+
   List<Character> get hiragana => _hiragana;
   List<Character> get katakana => _katakana;
 
@@ -102,14 +106,14 @@ class AppData with ChangeNotifier {
         if(!muted) audioCache.play('correct.mp3', volume: 0.1);
         _currentStreak++;
         _currentQuestion = _guessChara
-            ? Character('✔', _currentQuestion.sound)
-            : Character(_currentQuestion.chara, '✔');
+            ? Character('correct', _currentQuestion.sound)
+            : Character(_currentQuestion.chara, 'correct');
       } else {
+        if(!muted) audioCache.play('wrong.mp3', volume: 0.1);
         _currentStreak = 0;
         _currentQuestion = _guessChara
-            ? Character('X', _currentQuestion.sound)
-            : Character(_currentQuestion.chara, 'X');
-        _currentQuestion = Character('X', 'X');
+            ? Character('wrong', _currentQuestion.sound)
+            : Character(_currentQuestion.chara, 'wrong');
       }
       notifyListeners();
       nextQuestion();
@@ -118,9 +122,12 @@ class AppData with ChangeNotifier {
 
   void nextQuestion() {
     Future.delayed(Duration(milliseconds: 800), () {
-      getNextQuestion();
-      getNewAnswers(4);
-      notifyListeners();
+      if(_currentQIndex < maxQIndex){
+        _currentQIndex++;
+        getNextQuestion();
+        getNewAnswers(4);
+        notifyListeners();
+      }
       awaitingInput = true;
     });
   }

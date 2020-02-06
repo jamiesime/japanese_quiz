@@ -19,10 +19,10 @@ class QuizScreen extends StatelessWidget {
           children: <Widget>[
             QuestionDisplay(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 SwapCharasButton(),
-                StreakCounter(),
+                QuestionCounter(),
                 MuteButton(),
               ],
             ),
@@ -159,19 +159,22 @@ class _SwapCharasButtonState extends State<SwapCharasButton>
   }
 }
 
-class StreakCounter extends StatelessWidget {
+class QuestionCounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AppData data = Provider.of<AppData>(context);
+    final c = data.currentQIndex;
+    final m = data.maxQIndex;
     return Container(
-      padding: EdgeInsets.all(10),
-      color: Theme.of(context).primaryColor,
-      child: Consumer<AppData>(
-        builder: (_, data, __) => (Text(
-          data.getCurrentStreak().toString(),
-          style: Theme.of(context).textTheme.body1,
-        )),
-      ),
-    );
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Theme.of(context).primaryColor,
+        ),
+        padding: EdgeInsets.all(20),
+        child: Text(
+          "$c / $m",
+          style: Theme.of(context).textTheme.body2,
+        ));
   }
 }
 

@@ -9,21 +9,26 @@ var lightTheme = ThemeData(
   textTheme: TextTheme(
     headline: TextStyle(
       fontSize: 60,
-      fontFamily: 'Roboto',
+      fontFamily: 'Antipasto',
       color: Colors.white,
     ),
     title: TextStyle(
       fontSize: 40,
-      fontFamily: 'Roboto',
+      fontFamily: 'Antipasto',
       color: Colors.black,
     ),
     display1: TextStyle(
-      fontSize: 50,
-      fontFamily: 'Roboto',
+      fontSize: 60,
+      fontFamily: 'Antipasto',
       color: Colors.white,
     ),
     body1: TextStyle(
       fontSize: 30,
+      fontFamily: 'Antipasto',
+      color: Colors.black,
+    ),
+    body2: TextStyle(
+      fontSize: 40,
       fontFamily: 'Roboto',
       color: Colors.black,
     ),

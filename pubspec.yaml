@@ -43,6 +43,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: Antipasto
+      fonts:
+        - asset: assets/fonts/Antipasto.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
@@ -50,6 +54,7 @@ flutter:
   assets:
       - images/bg.png
       - assets/sound/
+      - assets/fonts/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
